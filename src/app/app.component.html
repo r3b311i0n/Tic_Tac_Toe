@@ -1,10 +1,10 @@
 <h1 style="text-align: center; color: ghostwhite">
   {{title}}
 </h1>
-<div *ngIf="player == ''">
+<div *ngIf="chosen === false">
   <canvas id="circle" height="240" width="240" (click)="setCircle()"></canvas>
   <canvas id="cross" height="240" width="240" (click)="setCross()"></canvas>
 </div>
-<div *ngIf="player != ''">
-  <app-board></app-board>
+<div *ngIf="chosen === true">
+  <app-board [player]="player" [cpu]="cpu"></app-board>
 </div>

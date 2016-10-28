@@ -4,12 +4,13 @@ import {BoardComponent} from './board.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements AfterViewInit {
   title = 'Tic Tac Toe';
-  private player: string = '';
-  private cpu: string = '';
+  private chosen: boolean = false;
+  player: string;
+  cpu: string;
 
   constructor(private boardComponent: BoardComponent) {
   }
@@ -39,10 +40,12 @@ export class AppComponent implements AfterViewInit {
   setCross() {
     this.player = 'cross';
     this.cpu = 'circle';
+    this.chosen = true;
   }
 
   setCircle() {
     this.player = 'circle';
     this.cpu = 'cross';
+    this.chosen = true;
   }
 }

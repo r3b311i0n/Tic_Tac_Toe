@@ -1,4 +1,4 @@
-import {Component, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {Component, ViewChild, ElementRef, AfterViewInit, Input} from '@angular/core';
 import {ShapeService} from './shape.service';
 
 @Component({
@@ -10,6 +10,8 @@ import {ShapeService} from './shape.service';
 })
 export class BoardComponent implements AfterViewInit {
   private t3Matrix = [[false, false, false], [false, false, false], [false, false, false]];
+  @Input() player: string;
+  @Input() cpu: string;
 
   @ViewChild('board') board: ElementRef;
   canvas: HTMLCanvasElement;
@@ -31,14 +33,28 @@ export class BoardComponent implements AfterViewInit {
     }
   }
 
+  get Player(): string {
+    return this.player;
+  }
+
+  get Cpu(): string {
+    return this.cpu;
+  }
+
+  get T3Matrix(): boolean[][] {
+    return this.t3Matrix;
+  }
+
   boardClick(event: MouseEvent) {
     let cell: number;
     let avail: boolean;
-    console.log(event.offsetX + ' ' + event.offsetY);
+    console.log(event.offsetX + ' ' + event.offsetY + ': player=> ' + this.Player + ': cpu=> ' + this.Cpu + ' ' + this.T3Matrix);
     cell = this.shapeService.determineSquare(event.offsetX, event.offsetY);
     avail = this.shapeService.checkAvailability(cell, this.t3Matrix);
-    if (avail === true) {
+    if (avail === true && this.Player === 'cross') {
       this.drawCross(cell);
+    }
+    else if (avail === true && this.Player === 'circle') {
       this.drawCircle(cell);
     }
   }
