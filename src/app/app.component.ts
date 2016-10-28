@@ -29,12 +29,14 @@ export class AppComponent implements AfterViewInit {
     crossCtx.moveTo(40, 200);
     crossCtx.lineTo(200, 40);
     crossCtx.stroke();
+    crossCtx.strokeRect(0, 0, 240, 240);
 
     circleCtx.strokeStyle = 'ghostwhite';
     circleCtx.strokeRect(0, 0, 360, 360);
     circleCtx.beginPath();
     circleCtx.arc(120, 120, 80, 0, Math.PI * 2);
     circleCtx.stroke();
+    circleCtx.strokeRect(0, 0, 240, 240);
   }
 
   setCross() {

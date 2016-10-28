@@ -2,8 +2,8 @@
   {{title}}
 </h1>
 <div *ngIf="chosen === false">
-  <canvas id="circle" height="240" width="240" (click)="setCircle()"></canvas>
-  <canvas id="cross" height="240" width="240" (click)="setCross()"></canvas>
+  <canvas class="centerChoice" id="circle" height="240" width="240" (click)="setCircle()"></canvas>
+  <canvas class="centerChoice" id="cross" height="240" width="240" (click)="setCross()"></canvas>
 </div>
 <div *ngIf="chosen === true">
   <app-board [player]="player" [cpu]="cpu"></app-board>

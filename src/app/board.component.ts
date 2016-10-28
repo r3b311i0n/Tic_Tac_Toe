@@ -3,9 +3,7 @@ import {ShapeService} from './shape.service';
 
 @Component({
   selector: 'app-board',
-  template: `
-<canvas id="board" #board class="board" height="360" width="360" (click)="boardClick($event)"></canvas>
-            `,
+  templateUrl: './board.component.html',
   styleUrls: ['./app.component.css']
 })
 export class BoardComponent implements AfterViewInit {
