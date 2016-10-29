@@ -32,26 +32,26 @@ export class ShapeService {
     }
   }
 
-  checkAvailability(cell: number, matrix: boolean[][]): boolean {
+  checkAvailability(cell: number, matrix: string[][]): boolean {
     switch (cell) {
       case 1:
-        return matrix[0][0] === false;
+        return matrix[0][0] === 'empty';
       case 2:
-        return matrix[0][1] === false;
+        return matrix[0][1] === 'empty';
       case 3:
-        return matrix[0][2] === false;
+        return matrix[0][2] === 'empty';
       case 4:
-        return matrix[1][0] === false;
+        return matrix[1][0] === 'empty';
       case 5:
-        return matrix[1][1] === false;
+        return matrix[1][1] === 'empty';
       case 6:
-        return matrix[1][2] === false;
+        return matrix[1][2] === 'empty';
       case 7:
-        return matrix[2][0] === false;
+        return matrix[2][0] === 'empty';
       case 8:
-        return matrix[2][1] === false;
+        return matrix[2][1] === 'empty';
       case 9:
-        return matrix[2][2] === false;
+        return matrix[2][2] === 'empty';
     }
   }
 }
