@@ -6,6 +6,7 @@ import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {ShapeService} from './shape.service';
 import {BoardComponent} from './board.component';
+import {MinimaxService} from './minimax.service';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import {BoardComponent} from './board.component';
     FormsModule,
     HttpModule
   ],
-  providers: [ShapeService, BoardComponent],
+  providers: [ShapeService, BoardComponent, MinimaxService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

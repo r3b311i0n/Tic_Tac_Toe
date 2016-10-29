@@ -1,5 +1,6 @@
 import {Component, ViewChild, ElementRef, AfterViewInit, Input} from '@angular/core';
 import {ShapeService} from './shape.service';
+import {MinimaxService} from './minimax.service';
 
 @Component({
   selector: 'app-board',
@@ -15,7 +16,7 @@ export class BoardComponent implements AfterViewInit {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
 
-  constructor(private shapeService: ShapeService) {
+  constructor(private shapeService: ShapeService, private minimaxService: MinimaxService) {
   }
 
   ngAfterViewInit() {
@@ -46,6 +47,7 @@ export class BoardComponent implements AfterViewInit {
   boardClick(event: MouseEvent) {
     let cell: number;
     let avail: boolean;
+    let cpuMove: number[];
     console.log(event.offsetX + ' ' + event.offsetY + ': player=> ' + this.Player + ': cpu=> ' + this.Cpu + ' ' + this.T3Matrix);
     cell = this.shapeService.determineSquare(event.offsetX, event.offsetY);
     avail = this.shapeService.checkAvailability(cell, this.t3Matrix);
@@ -55,6 +57,8 @@ export class BoardComponent implements AfterViewInit {
     else if (avail === true && this.Player === 'circle') {
       this.drawCircle(cell);
     }
+    cpuMove = this.minimaxService.move(this.t3Matrix, this.player, this.cpu);
+    console.log(cpuMove);
   }
 
   drawCross(cell: number) {
