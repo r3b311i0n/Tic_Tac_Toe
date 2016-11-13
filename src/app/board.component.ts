@@ -64,7 +64,6 @@ export class BoardComponent implements AfterViewInit {
     }
     console.log(this.T3Matrix);
     cpuMove = this.minimaxService.move(this.T3Matrix);
-    // console.log(cpuMove);
     cCell = this.diffBoard(cpuMove);
     this.T3Matrix = cpuMove;
     // console.log(this.T3Matrix + ' ' + cCell);
