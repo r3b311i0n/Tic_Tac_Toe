@@ -5,10 +5,13 @@ import {MinimaxService} from './minimax.service';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css', './board.component.css']
 })
 export class BoardComponent implements AfterViewInit {
   private t3Matrix: boolean[][] = [[null, null, null], [null, null, null], [null, null, null]];
+  myTurn = true;
+  resetButton = false;
+  winnerLabel: string;
   @Input() player: string;
   @Input() cpu: string;
 
@@ -20,16 +23,7 @@ export class BoardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.canvas = this.board.nativeElement;
-    this.context = this.canvas.getContext('2d');
-
-    this.context.strokeStyle = 'ghostwhite';
-    this.context.strokeRect(0, 0, 360, 360);
-    for (let i = 0; i <= 360; i += 120) {
-      this.context.strokeRect(i, 0, 120, 120);
-      this.context.strokeRect(i, 120, 120, 120);
-      this.context.strokeRect(i, 240, 120, 120);
-    }
+    this.drawBoard();
   }
 
   get Player(): string {
@@ -48,7 +42,7 @@ export class BoardComponent implements AfterViewInit {
     this.t3Matrix = t3Matrix;
   }
 
-  boardClick(event: MouseEvent) {
+  boardClick(event: MouseEvent): void {
     let cell: number;
     let avail: boolean;
     let cCell: number;
@@ -63,7 +57,6 @@ export class BoardComponent implements AfterViewInit {
     else if (avail === true && this.Player === 'circle') {
       this.drawCircle(cell, false);
     }
-    winner = this.minimaxService.getWinner(this.T3Matrix);
     console.log(this.T3Matrix);
     cpuMove = this.minimaxService.move(this.T3Matrix);
     console.log(cpuMove[0]);
@@ -75,9 +68,42 @@ export class BoardComponent implements AfterViewInit {
     else if (avail === true && this.Cpu === 'circle') {
       this.drawCircle(cCell, true);
     }
+    winner = this.minimaxService.getWinner(this.T3Matrix);
+    if (winner === 1 || winner === 0) {
+      this.winnerLabel = winner === 1 ? 'CPU Wins!' : 'You Win!';
+      this.resetButton = true;
+    }
+    else {
+      let tie: boolean;
+      for (let i = 0; i < 3; ++i) {
+        tie = this.T3Matrix[i].every(function (value, index, array) {
+          return value !== null;
+        });
+        if (!tie) {
+          break;
+        }
+      }
+      if (tie) {
+        this.winnerLabel = 'It\'s a Tie!';
+        this.resetButton = true;
+      }
+    }
   }
 
-  drawCross(cell: number, user: boolean) {
+  drawBoard(): void {
+    this.canvas = this.board.nativeElement;
+    this.context = this.canvas.getContext('2d');
+
+    this.context.strokeStyle = 'ghostwhite';
+    this.context.strokeRect(0, 0, 360, 360);
+    for (let i = 0; i <= 360; i += 120) {
+      this.context.strokeRect(i, 0, 120, 120);
+      this.context.strokeRect(i, 120, 120, 120);
+      this.context.strokeRect(i, 240, 120, 120);
+    }
+  }
+
+  drawCross(cell: number, user: boolean): void {
     let canvas = <HTMLCanvasElement> document.getElementById('board');
     let context: CanvasRenderingContext2D = canvas.getContext('2d');
 
@@ -166,7 +192,7 @@ export class BoardComponent implements AfterViewInit {
     }
   }
 
-  drawCircle(cell: number, user: boolean) {
+  drawCircle(cell: number, user: boolean): void {
     let canvas = <HTMLCanvasElement> document.getElementById('board');
     let context: CanvasRenderingContext2D = canvas.getContext('2d');
 
@@ -239,5 +265,14 @@ export class BoardComponent implements AfterViewInit {
         }
       }
     }
+  }
+
+  resetBoard(): void {
+    let canvas = <HTMLCanvasElement> document.getElementById('board');
+    let context: CanvasRenderingContext2D = canvas.getContext('2d');
+    this.T3Matrix = [[null, null, null], [null, null, null], [null, null, null]];
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.drawBoard();
+    this.resetButton = false;
   }
 }

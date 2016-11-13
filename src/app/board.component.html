@@ -1,1 +1,7 @@
 <canvas id="board" #board class="board" height="360" width="360" (click)="boardClick($event)"></canvas>
+<div class="center">
+  <button (click)="resetBoard()">Reset Board</button>
+</div>
+<div *ngIf="resetButton" class="center">
+  <label>{{winnerLabel}}</label>
+</div>
