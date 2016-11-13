@@ -8,7 +8,7 @@ import {MinimaxService} from './minimax.service';
   styleUrls: ['./app.component.css']
 })
 export class BoardComponent implements AfterViewInit {
-  private t3Matrix = [['empty', 'empty', 'empty'], ['empty', 'empty', 'empty'], ['empty', 'empty', 'empty']];
+  private t3Matrix: boolean[][] = [[null, null, null], [null, null, null], [null, null, null]];
   @Input() player: string;
   @Input() cpu: string;
 
@@ -40,25 +40,40 @@ export class BoardComponent implements AfterViewInit {
     return this.cpu;
   }
 
-  get T3Matrix(): string[][] {
+  get T3Matrix(): boolean[][] {
     return this.t3Matrix;
+  }
+
+  set T3Matrix(t3Matrix: boolean[][]) {
+    this.t3Matrix = t3Matrix;
   }
 
   boardClick(event: MouseEvent) {
     let cell: number;
     let avail: boolean;
-    let cpuMove: number[];
+    let cCell: number;
+    let cpuMove: any;
     console.log(event.offsetX + ' ' + event.offsetY + ': player=> ' + this.Player + ': cpu=> ' + this.Cpu + ' ' + this.T3Matrix);
     cell = this.shapeService.determineSquare(event.offsetX, event.offsetY);
-    avail = this.shapeService.checkAvailability(cell, this.t3Matrix);
+    avail = this.shapeService.checkAvailability(cell, this.T3Matrix);
     if (avail === true && this.Player === 'cross') {
       this.drawCross(cell);
     }
     else if (avail === true && this.Player === 'circle') {
       this.drawCircle(cell);
     }
-    cpuMove = this.minimaxService.move(this.t3Matrix, this.player, this.cpu);
-    console.log(cpuMove);
+    console.log(this.T3Matrix);
+    cpuMove = this.minimaxService.move(this.T3Matrix);
+    // console.log(cpuMove);
+    cCell = this.diffBoard(cpuMove);
+    this.T3Matrix = cpuMove;
+    // console.log(this.T3Matrix + ' ' + cCell);
+    if (avail === true && this.Cpu === 'cross') {
+      this.drawCross(cCell);
+    }
+    else if (avail === true && this.Cpu === 'circle') {
+      this.drawCircle(cCell);
+    }
   }
 
   drawCross(cell: number) {
@@ -67,7 +82,7 @@ export class BoardComponent implements AfterViewInit {
 
     switch (cell) {
       case 1:
-        this.t3Matrix[0][0] = 'cross';
+        this.T3Matrix[0][0] = false;
         context.beginPath();
         context.moveTo(20, 260);
         context.lineTo(100, 340);
@@ -76,7 +91,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 2:
-        this.t3Matrix[0][1] = 'cross';
+        this.T3Matrix[0][1] = false;
         context.beginPath();
         context.moveTo(140, 260);
         context.lineTo(220, 340);
@@ -85,7 +100,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 3:
-        this.t3Matrix[0][2] = 'cross';
+        this.T3Matrix[0][2] = false;
         context.beginPath();
         context.moveTo(260, 260);
         context.lineTo(340, 340);
@@ -94,7 +109,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 4:
-        this.t3Matrix[1][0] = 'cross';
+        this.T3Matrix[1][0] = false;
         context.beginPath();
         context.moveTo(20, 140);
         context.lineTo(100, 220);
@@ -103,7 +118,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 5:
-        this.t3Matrix[1][1] = 'cross';
+        this.T3Matrix[1][1] = false;
         context.beginPath();
         context.moveTo(140, 140);
         context.lineTo(220, 220);
@@ -112,7 +127,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 6:
-        this.t3Matrix[1][2] = 'cross';
+        this.T3Matrix[1][2] = false;
         context.beginPath();
         context.moveTo(260, 140);
         context.lineTo(340, 220);
@@ -121,7 +136,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 7:
-        this.t3Matrix[2][0] = 'cross';
+        this.T3Matrix[2][0] = false;
         context.beginPath();
         context.moveTo(20, 20);
         context.lineTo(100, 100);
@@ -130,7 +145,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 8:
-        this.t3Matrix[2][1] = 'cross';
+        this.T3Matrix[2][1] = false;
         context.beginPath();
         context.moveTo(140, 20);
         context.lineTo(220, 100);
@@ -139,7 +154,7 @@ export class BoardComponent implements AfterViewInit {
         context.stroke();
         break;
       case 9:
-        this.t3Matrix[2][2] = 'cross';
+        this.T3Matrix[2][2] = false;
         context.beginPath();
         context.moveTo(260, 20);
         context.lineTo(340, 100);
@@ -156,59 +171,72 @@ export class BoardComponent implements AfterViewInit {
 
     switch (cell) {
       case 1:
-        this.t3Matrix[0][0] = 'circle';
+        this.T3Matrix[0][0] = true;
         context.beginPath();
         context.arc(60, 300, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 2:
-        this.t3Matrix[0][1] = 'circle';
+        this.T3Matrix[0][1] = true;
         context.beginPath();
         context.arc(180, 300, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 3:
-        this.t3Matrix[0][2] = 'circle';
+        this.T3Matrix[0][2] = true;
         context.beginPath();
         context.arc(300, 300, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 4:
-        this.t3Matrix[1][0] = 'circle';
+        this.T3Matrix[1][0] = true;
         context.beginPath();
         context.arc(60, 180, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 5:
-        this.t3Matrix[1][1] = 'circle';
+        this.T3Matrix[1][1] = true;
         context.beginPath();
         context.arc(180, 180, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 6:
-        this.t3Matrix[1][2] = 'circle';
+        this.T3Matrix[1][2] = true;
         context.beginPath();
         context.arc(300, 180, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 7:
-        this.t3Matrix[2][0] = 'circle';
+        this.T3Matrix[2][0] = true;
         context.beginPath();
         context.arc(60, 60, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 8:
-        this.t3Matrix[2][1] = 'circle';
+        this.T3Matrix[2][1] = true;
         context.beginPath();
         context.arc(180, 60, 40, 0, Math.PI * 2);
         context.stroke();
         break;
       case 9:
-        this.t3Matrix[2][2] = 'circle';
+        this.T3Matrix[2][2] = true;
         context.beginPath();
         context.arc(300, 60, 40, 0, Math.PI * 2);
         context.stroke();
         break;
+    }
+  }
+
+  diffBoard(cpuMove: any): number {
+    let cell: number;
+    for (let i = 0; i < 3; ++i) {
+      for (let n = 0; n < 3; ++n) {
+        if (cpuMove[i][n] !== this.T3Matrix[i][n]) {
+          cell = this.shapeService.convertToNumber([i, n]);
+          console.log(cell);
+          return cell;
+        }
+      }
     }
   }
 }
