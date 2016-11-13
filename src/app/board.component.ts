@@ -43,6 +43,15 @@ export class BoardComponent implements AfterViewInit {
   }
 
   boardClick(event: MouseEvent): void {
+    let square: number = this.shapeService.determineSquare(event.offsetX, event.offsetY);
+    let avail: boolean = this.shapeService.checkAvailability(square, this.T3Matrix);
+    if (this.myTurn && avail) {
+      this.control(event);
+      this.myTurn = true;
+    }
+  }
+
+  control(event: MouseEvent) {
     let cell: number;
     let avail: boolean;
     let cCell: number;
@@ -57,6 +66,8 @@ export class BoardComponent implements AfterViewInit {
     else if (avail === true && this.Player === 'circle') {
       this.drawCircle(cell, false);
     }
+    // end turn
+    this.myTurn = false;
     console.log(this.T3Matrix);
     cpuMove = this.minimaxService.move(this.T3Matrix);
     console.log(cpuMove[0]);
@@ -76,7 +87,7 @@ export class BoardComponent implements AfterViewInit {
     else {
       let tie: boolean;
       for (let i = 0; i < 3; ++i) {
-        tie = this.T3Matrix[i].every(function (value, index, array) {
+        tie = this.T3Matrix[i].every(function (value) {
           return value !== null;
         });
         if (!tie) {
