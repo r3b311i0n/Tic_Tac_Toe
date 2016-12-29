@@ -1,3 +1,5 @@
+// taken and modeified from: https://blog.vivekpanyam.com/how-to-build-an-ai-that-wins-the-basics-of-minimax-search/
+
 import {Injectable} from '@angular/core';
 
 @Injectable()
